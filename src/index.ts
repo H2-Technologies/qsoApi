@@ -35,12 +35,13 @@ app.get('/callsigns/:callsign', async (req, res) => {
     let json = new XMLParser().parse(response).QRZDatabase.Callsign;
     let licenseData: LicenseData = new LicenseData();
     licenseData.callsign = json.call;
-    licenseData.county = json.county;
-    licenseData.email = json.email;
+    licenseData.city = json.addr2;
+    licenseData.country = json.country;
+    licenseData.email = json.email == null ? 'null@null.com' : json.email;
     licenseData.first_name = json.fname;
     licenseData.last_fetched = new Date().getTime();
     licenseData.last_name = json.name;
-    licenseData.qsl_mgr = json.qslmgr;
+    licenseData.qsl_mgr = json.qslmgr == null ? 'QRZ' : json.qslmgr;
     licenseData.state = json.state;
 
     const { data, error } = await supabase.from('callsigns').upsert(licenseData).select();
