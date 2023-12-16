@@ -3,4 +3,4 @@ import { Database } from "../types/database.types";
 import dotenv from 'dotenv';
 dotenv.config();
 
-export const supabase = createClient<Database>(process.env.SUPABASE_URL, process.env.SUPABASE_ANON)
+export const supabase = createClient<Database>(process.env.SUPABASE_URL, process.env.SUPABASE_KEY)

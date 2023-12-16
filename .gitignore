@@ -20,3 +20,5 @@ build/
 .flaskenv*
 !.env.project
 !.env.vault
+
+.env*
