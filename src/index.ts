@@ -77,7 +77,13 @@ app.post('/qso/:callsign', async (req, res) => {
 })
 
 app.get('/qso/:callsign', async (req, res) => {
-
+  const { data, error } = await supabase.from('qsoData').select('*').eq('operator', req.params.callsign);
+  if (error) {
+    console.error(error);
+    res.status(500).send(`Internal Server Error: ${error.message}`);
+    return;
+  }
+  res.status(200).send(data);
 });
 
 app.listen(4000, () => {
