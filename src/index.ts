@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import express from 'express';
-import parseCsv  from './helpers/parseCsv'
+import bodyParser from 'body-parser';
+import { QsoData } from './types/QsoData';
 import { XMLParser } from 'fast-xml-parser';
 import { supabase } from './lib/supabaseClient';
 import { LicenseData } from './types/LicenseData';
@@ -8,6 +9,8 @@ import { LicenseData } from './types/LicenseData';
 const app = express();
 global.QRZ_KEY = "";
 dotenv.config();
+
+app.use(bodyParser.json());
 
 let req: Response;
 async function start() {
@@ -54,6 +57,26 @@ app.get('/callsigns/:callsign', async (req, res) => {
     return;
   }
   res.status(200).send(data[0]);
+});
+
+app.post('/qso/:callsign', async (req, res) => {
+  let json: QsoData = new QsoData();
+  json.band = req.body.band;
+  json.callsign = req.params.callsign;
+  json.exchange = req.body.exchange;
+  json.frequency = req.body.frequency;
+  json.mode = req.body.mode;
+  const { error } = await supabase.from('qsoData').insert(json);
+  if (error) {
+    console.error(error);
+    res.status(500).send(`Internal Server Error: ${error.message}`);
+    return;
+  }
+  res.status(200);
+})
+
+app.get('/qso/:callsign', async (req, res) => {
+
 });
 
 app.listen(4000, () => {
