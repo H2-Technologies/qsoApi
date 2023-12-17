@@ -3,8 +3,9 @@ export class QsoData {
   callsign: string;
   exchange: string;
   frequency: string;
-  mode: string;
   id: number;
+  mode: string;
+  operator: string;
   constructor() {
     this.id = Math.floor(Math.random() * 10000000000000);
   }

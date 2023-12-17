@@ -66,13 +66,14 @@ app.post('/qso/:callsign', async (req, res) => {
   json.exchange = req.body.exchange;
   json.frequency = req.body.frequency;
   json.mode = req.body.mode;
+  json.operator = req.params.callsign;
   const { error } = await supabase.from('qsoData').insert(json);
   if (error) {
     console.error(error);
     res.status(500).send(`Internal Server Error: ${error.message}`);
     return;
   }
-  res.status(200);
+  res.sendStatus(200);
 })
 
 app.get('/qso/:callsign', async (req, res) => {
