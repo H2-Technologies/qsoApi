@@ -10,7 +10,7 @@ const app = express();
 global.QRZ_KEY = "";
 dotenv.config();
 
-app.use(bodyParser.json());
+app.use(express.json());
 
 let req: Response;
 async function start() {
