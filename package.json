@@ -11,5 +11,9 @@
   },
   "devDependencies": {
     "@types/express": "^4"
+  },
+  "volta": {
+    "node": "21.4.0",
+    "yarn": "4.0.2"
   }
 }
