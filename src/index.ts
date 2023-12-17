@@ -42,7 +42,7 @@ app.get('/callsigns/:callsign', async (req, res) => {
     licenseData.last_fetched = new Date().getTime();
     licenseData.last_name = json.name;
     licenseData.qsl_mgr = json.qslmgr == null ? 'QRZ' : json.qslmgr;
-    licenseData.state = json.state;
+    licenseData.state = json.state == null ? 'N/A' : json.state;
 
     const { data, error } = await supabase.from('callsigns').upsert(licenseData).select();
     if (error) {
