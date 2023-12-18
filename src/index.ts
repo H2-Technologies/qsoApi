@@ -33,7 +33,7 @@ async function start() {
 }
 start();
 
-app.options("*", cors());
+app.options("/qso/:callsign", cors());
 
 app.get("/", (req, res) => {
   res.send("Hello World");
