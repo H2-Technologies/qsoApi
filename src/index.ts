@@ -25,23 +25,6 @@ async function start() {
 }
 start();
 
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-  );
-
-  // Handle pre-flight requests for CORS
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
-    return res.status(200).json({});
-  }
-
-  next();
-});
-
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
@@ -89,8 +72,6 @@ app.get("/callsigns/:callsign", async (req, res) => {
 });
 
 app.post("/qso/:callsign", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST");
   let json: QsoData = new QsoData();
   json.band = req.body.band;
   json.callsign = req.params.callsign;
@@ -107,16 +88,7 @@ app.post("/qso/:callsign", async (req, res) => {
   res.sendStatus(200);
 });
 
-//set the options request on all routes to /qso *,  whether post or get, to allow any origin to access the api
-app.options("/qso/:callsign", (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST");
-  res.sendStatus(200);
-});
-
 app.get("/qso/:callsign", async (req, res) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST");
   const { data, error } = await supabase
     .from("qsoData")
     .select("*")
