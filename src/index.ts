@@ -1,26 +1,22 @@
-import cors from "cors";
-import dotenv from "dotenv";
-import express from "express";
-import bodyParser from "body-parser";
-import { QsoData } from "./types/QsoData";
-import { XMLParser } from "fast-xml-parser";
-import { supabase } from "./lib/supabaseClient";
-import { LicenseData } from "./types/LicenseData";
+import cors from 'cors';
+import dotenv from 'dotenv';
+import express from 'express';
+import bodyParser from 'body-parser';
+import { QsoData } from './types/QsoData';
+import { XMLParser } from 'fast-xml-parser';
+import { supabase } from './lib/supabaseClient';
+import { LicenseData } from './types/LicenseData';
 
 const app = express();
 global.QRZ_KEY = "";
 dotenv.config();
 
+const corsOptions = {
+  origin: false,
+  optionsSuccessStatus: 200
+}
 app.use(express.json());
-app.use(
-  cors({
-    origin: "*", // Set this to your actual front-end origin in production
-    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-    credentials: true,
-    optionsSuccessStatus: 204,
-    allowedHeaders: "Content-Type,Authorization",
-  })
-);
+app.use(cors(corsOptions));
 
 let req: Response;
 async function start() {
@@ -39,11 +35,9 @@ app.get("/", (req, res) => {
   res.send("Hello World");
 });
 
-app.get("/callsigns/:callsign", async (req, res) => {
-  const { data, error } = await supabase
-    .from("callsigns")
-    .select("*")
-    .eq("callsign", req.params.callsign);
+app.get('/callsigns/:callsign', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  const { data, error } = await supabase.from("callsigns").select('*').eq("callsign", req.params.callsign);
   if (error) {
     console.error(error);
     res.status(500).send("Internal Server Error");
@@ -81,7 +75,8 @@ app.get("/callsigns/:callsign", async (req, res) => {
   res.status(200).send(data[0]);
 });
 
-app.post("/qso/:callsign", async (req, res) => {
+app.post('/qso/:callsign', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
   let json: QsoData = new QsoData();
   json.band = req.body.band;
   json.callsign = req.params.callsign;
@@ -98,11 +93,9 @@ app.post("/qso/:callsign", async (req, res) => {
   res.sendStatus(200);
 });
 
-app.get("/qso/:callsign", async (req, res) => {
-  const { data, error } = await supabase
-    .from("qsoData")
-    .select("*")
-    .eq("operator", req.params.callsign);
+app.get('/qso/:callsign', async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*')
+  const { data, error } = await supabase.from('qsoData').select('*').eq('operator', req.params.callsign);
   if (error) {
     console.error(error);
     res.status(500).send(`Internal Server Error: ${error.message}`);
