@@ -12,7 +12,15 @@ global.QRZ_KEY = "";
 dotenv.config();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // Set this to your actual front-end origin in production
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+    optionsSuccessStatus: 204,
+    allowedHeaders: "Content-Type,Authorization",
+  })
+);
 
 let req: Response;
 async function start() {
