@@ -1,3 +1,4 @@
+import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 import bodyParser from 'body-parser';
@@ -11,6 +12,7 @@ global.QRZ_KEY = "";
 dotenv.config();
 
 app.use(express.json());
+app.use(cors());
 
 let req: Response;
 async function start() {
