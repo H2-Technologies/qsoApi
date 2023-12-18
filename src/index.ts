@@ -33,6 +33,8 @@ async function start() {
 }
 start();
 
+app.options("*", cors());
+
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
